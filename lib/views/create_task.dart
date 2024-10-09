@@ -21,7 +21,7 @@ class _CreateTaskViewState extends State<CreateTaskView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create Task"),
+        title: const Text("Create Task"),
       ),
       body: Column(
         children: [
@@ -31,19 +31,19 @@ class _CreateTaskViewState extends State<CreateTaskView> {
           TextField(
             controller: descriptionController,
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           ElevatedButton(
               onPressed: () async {
                 if (titleController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Title cannot be empty.")));
+                      const SnackBar(content: Text("Title cannot be empty.")));
                   return;
                 }
                 if (descriptionController.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Description cannot be empty.")));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Description cannot be empty.")));
                   return;
                 }
 
@@ -62,10 +62,18 @@ class _CreateTaskViewState extends State<CreateTaskView> {
                     showDialog(
                         context: context,
                         builder: (context) {
-                          return AlertDialog(
+                          return  AlertDialog(
                             title: Text("Message"),
                             content:
                                 Text("Task has been created successfully."),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Okay"))
+                            ],
                           );
                         });
                   });
@@ -76,7 +84,9 @@ class _CreateTaskViewState extends State<CreateTaskView> {
                       .showSnackBar(SnackBar(content: Text(e.toString())));
                 }
               },
-              child:isLoading ? Center(child: CircularProgressIndicator()): Text("Create Task"))
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : const Text("Create Task"))
         ],
       ),
     );
