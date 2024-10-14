@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_b4/models/task.dart';
 import 'package:flutter_b4/services/task.dart';
@@ -22,7 +23,7 @@ class GetAllTask extends StatelessWidget {
         icon: Icon(Icons.add),
       ),
       body: StreamProvider.value(
-        value: TaskServices().getCompletedTasks(),
+        value: TaskServices().getAllTasks(),
         initialData: [TaskModel()],
         builder: (context, child) {
           List<TaskModel> taskList = context.watch<List<TaskModel>>();
@@ -33,6 +34,23 @@ class GetAllTask extends StatelessWidget {
                   leading: Icon(Icons.task),
                   title: Text(taskList[i].title.toString()),
                   subtitle: Text(taskList[i].description.toString()),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                          onPressed: () async {
+                            await TaskServices()
+                                .deleteTask(taskList[i].docId.toString());
+                          },
+                          icon: Icon(Icons.delete)),
+                      CupertinoSwitch(
+                          value: taskList[i].isCompleted!,
+                          onChanged: (val) async {
+                            await TaskServices().markTaskAsComplete(
+                                taskList[i].docId.toString());
+                          })
+                    ],
+                  ),
                 );
               });
         },
