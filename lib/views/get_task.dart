@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_b4/models/task.dart';
 import 'package:flutter_b4/services/task.dart';
 import 'package:flutter_b4/views/create_task.dart';
+import 'package:flutter_b4/views/update_task.dart';
 import 'package:provider/provider.dart';
 
 class GetAllTask extends StatelessWidget {
@@ -43,6 +44,15 @@ class GetAllTask extends StatelessWidget {
                                 .deleteTask(taskList[i].docId.toString());
                           },
                           icon: Icon(Icons.delete)),
+                      IconButton(
+                          onPressed: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        UpdateTaskView(model: taskList[i])));
+                          },
+                          icon: Icon(Icons.edit)),
                       CupertinoSwitch(
                           value: taskList[i].isCompleted!,
                           onChanged: (val) async {

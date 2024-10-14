@@ -3,14 +3,16 @@ import 'package:flutter_b4/models/task.dart';
 
 import '../services/task.dart';
 
-class CreateTaskView extends StatefulWidget {
-  CreateTaskView({super.key});
+class UpdateTaskView extends StatefulWidget {
+  final TaskModel model;
+
+  UpdateTaskView({super.key, required this.model});
 
   @override
-  State<CreateTaskView> createState() => _CreateTaskViewState();
+  State<UpdateTaskView> createState() => _UpdateTaskViewState();
 }
 
-class _CreateTaskViewState extends State<CreateTaskView> {
+class _UpdateTaskViewState extends State<UpdateTaskView> {
   TextEditingController titleController = TextEditingController();
 
   TextEditingController descriptionController = TextEditingController();
@@ -18,10 +20,19 @@ class _CreateTaskViewState extends State<CreateTaskView> {
   bool isLoading = false;
 
   @override
+  void initState() {
+    titleController =
+        TextEditingController(text: widget.model.title.toString());
+    descriptionController =
+        TextEditingController(text: widget.model.description.toString());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create Task"),
+        title: const Text("Update Task"),
       ),
       body: Column(
         children: [
@@ -51,11 +62,10 @@ class _CreateTaskViewState extends State<CreateTaskView> {
                   isLoading = true;
                   setState(() {});
                   await TaskServices()
-                      .createTask(TaskModel(
+                      .updateTask(TaskModel(
                           title: titleController.text,
                           description: descriptionController.text,
-                          isCompleted: false,
-                          createdAt: DateTime.now().millisecondsSinceEpoch))
+                          docId: widget.model.docId.toString()))
                       .then((val) {
                     isLoading = false;
                     setState(() {});
@@ -65,7 +75,7 @@ class _CreateTaskViewState extends State<CreateTaskView> {
                           return AlertDialog(
                             title: Text("Message"),
                             content:
-                                Text("Task has been created successfully."),
+                                Text("Task has been updated successfully."),
                             actions: [
                               TextButton(
                                   onPressed: () {
@@ -86,7 +96,7 @@ class _CreateTaskViewState extends State<CreateTaskView> {
               },
               child: isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : const Text("Create Task"))
+                  : const Text("Update Task"))
         ],
       ),
     );
