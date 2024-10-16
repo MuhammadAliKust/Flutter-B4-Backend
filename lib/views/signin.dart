@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_b4/services/auth.dart';
 
@@ -10,6 +12,9 @@ class SignInView extends StatefulWidget {
 
 class _SignInViewState extends State<SignInView> {
   TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
   TextEditingController pwdController = TextEditingController();
 
@@ -24,7 +29,16 @@ class _SignInViewState extends State<SignInView> {
       body: Column(
         children: [
           TextField(
+            controller: nameController,
+          ),
+          TextField(
             controller: emailController,
+          ),
+          TextField(
+            controller: addressController,
+          ),
+          TextField(
+            controller: phoneController,
           ),
           TextField(
             controller: pwdController,
@@ -51,22 +65,41 @@ class _SignInViewState extends State<SignInView> {
                       .then((val) {
                     isLoading = false;
                     setState(() {});
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text("Message"),
-                            content:
-                                Text("User has been loggedIn successfully"),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Okay"))
-                            ],
-                          );
-                        });
+                    if (val!.emailVerified == true) {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text("Message"),
+                              content:
+                                  Text("User has been loggedIn successfully"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Okay"))
+                              ],
+                            );
+                          });
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text("Message"),
+                              content:
+                                  Text("Kindly verify your email address."),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Okay"))
+                              ],
+                            );
+                          });
+                    }
                   });
                 } catch (e) {
                   isLoading = false;

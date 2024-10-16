@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_b4/models/user.dart';
 import 'package:flutter_b4/services/auth.dart';
+import 'package:flutter_b4/services/user.dart';
 
 class RegisterView extends StatefulWidget {
   RegisterView({super.key});
@@ -10,9 +12,11 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
   TextEditingController pwdController = TextEditingController();
-
   bool isLoading = false;
 
   @override
@@ -24,7 +28,16 @@ class _RegisterViewState extends State<RegisterView> {
       body: Column(
         children: [
           TextField(
+            controller: nameController,
+          ),
+          TextField(
             controller: emailController,
+          ),
+          TextField(
+            controller: addressController,
+          ),
+          TextField(
+            controller: phoneController,
           ),
           TextField(
             controller: pwdController,
@@ -48,25 +61,35 @@ class _RegisterViewState extends State<RegisterView> {
                       .registerUser(
                           email: emailController.text,
                           password: pwdController.text)
-                      .then((val) {
-                    isLoading = false;
-                    setState(() {});
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text("Message"),
-                            content:
-                                Text("User has been registered successfully"),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Okay"))
-                            ],
-                          );
-                        });
+                      .then((val) async {
+                    await UserServices()
+                        .createUser(UserModel(
+                            docId: val!.uid.toString(),
+                            email: emailController.text,
+                            phoneNumber: phoneController.text,
+                            name: nameController.text,
+                            address: addressController.text,
+                            createdAt: DateTime.now().millisecondsSinceEpoch))
+                        .then((val) {
+                      isLoading = false;
+                      setState(() {});
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text("Message"),
+                              content:
+                                  Text("User has been registered successfully"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Okay"))
+                              ],
+                            );
+                          });
+                    });
                   });
                 } catch (e) {
                   isLoading = false;
