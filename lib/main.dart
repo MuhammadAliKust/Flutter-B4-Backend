@@ -5,6 +5,7 @@ import 'package:flutter_b4/views/get_task.dart';
 import 'package:flutter_b4/views/register.dart';
 import 'package:flutter_b4/views/reset_pwd.dart';
 import 'package:flutter_b4/views/signin.dart';
+import 'package:flutter_b4/views/upload_image.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:RegisterView(),
+      home:UploadImageView(),
     );
   }
 }

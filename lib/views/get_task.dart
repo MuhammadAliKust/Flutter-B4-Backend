@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_b4/models/task.dart';
 import 'package:flutter_b4/services/task.dart';
 import 'package:flutter_b4/views/create_task.dart';
+import 'package:flutter_b4/views/dashboard.dart';
 import 'package:flutter_b4/views/update_task.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +19,9 @@ class GetAllTask extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CreateTaskView()));
+              MaterialPageRoute(builder: (context) => DashboardView()));
         },
-        label: Text("Add Task"),
+        label: Text("Go to Dashoard"),
         icon: Icon(Icons.add),
       ),
       body: StreamProvider.value(

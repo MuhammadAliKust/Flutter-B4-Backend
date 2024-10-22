@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_b4/models/task.dart';
 
 class TaskServices {
@@ -54,6 +55,7 @@ class TaskServices {
   Stream<List<TaskModel>> getAllTasks() {
     return FirebaseFirestore.instance
         .collection('taskCollection')
+        .where('userID', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots()
         .map((taskList) => taskList.docs
             .map((taskModel) => TaskModel.fromJson(taskModel.data()))
